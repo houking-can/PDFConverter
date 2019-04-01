@@ -59,5 +59,8 @@ Refer to [Acrobat SDK and documents](https://www.adobe.com/devnet/acrobat/docume
 The source code is for learning and communication only.   
 Please contact [Adobe](https://www.adobe.com/cn/) for commercial use.
 
+# License
+[Apache License 2.0](./LICENSE)
+
 
 
