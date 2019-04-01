@@ -1,5 +1,5 @@
 # PDF2HTML
-Convert PDF to HTML using Adobe DC SDK . 
+Convert PDF to HTML using Adobe DC SDK . You can also convert pdf to any formats Adobe supported, like txt,xml,doc,docx,jpg,ps,rtf etc.
 Notice: To run this project, you must install [Adobe Acrobat DC](https://www.adobe.com/cn/downloads.html?promoid=RL89NGY7&mv=other)
 ## Environment and Dependency 
 * Operating system: Windows 10 Professional
@@ -21,11 +21,11 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 4. If you run this repository directly, you may skip step 1 and 2. Just compile and run in Visual Studio.
 
 ## Extension
-If you want to convert pdf to other formats, such as doc , txt, etc. Just modify a line code in:  
+If you want to convert pdf to other formats, such as doc . Just modify a line code in:  
 ```  
 object[] saveAsParam1 = { savefileName + ".html", "com.adobe.acrobat.html-3-20" };  
 ```
-cConvIDs are supported by Acrobat library. The string ids are as follows:  
+with the cConvIDs supported by Acrobat library. The list of cConvIDs are as follows:  
 
 cConvID| extension | comment  
 -|:-: |:-:
