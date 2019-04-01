@@ -3,96 +3,183 @@ using System.IO;
 using Acrobat;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using ThreadState = System.Diagnostics.ThreadState;
 
-public class JSObject
-{
-    private AcroAVDoc g_AVDoc = null;
-
-    public int Convert_pdf_to_html(String fileName, String saveDir)
-    {
-
-        FileInfo fileinfo = new FileInfo(fileName);
-        //file exits
-        if (fileinfo.Exists){
-            if (g_AVDoc != null){
-                g_AVDoc.Close(0);
-            }
-            g_AVDoc = new AcroAVDoc();
-            g_AVDoc.Open(fileName, "");
-        }//file not exist
-        else{
-            Console.WriteLine("{0} not exist!", fileName);
-            return 2;
-        }
-        // if open pdf success
-        if (g_AVDoc.IsValid()){
-            String savefileName = "";
-            if (Directory.Exists(saveDir)){
-                savefileName = saveDir + '\\' + Path.GetFileNameWithoutExtension(fileName);
-            }
-            else{
-                savefileName = Path.GetDirectoryName(saveDir) + Path.GetFileNameWithoutExtension(saveDir);
-            }
-
-            CAcroPDDoc pdDoc = (CAcroPDDoc)g_AVDoc.GetPDDoc();
-            //Acquire the Acrobat JavaScript Object interface from the PDDoc object
-            Object jsObj = pdDoc.GetJSObject();
-            Type T = jsObj.GetType();
-
-            object[] saveAsParam1 = { savefileName + ".html", "com.adobe.acrobat.html-3-20" };
-            //object[] saveAsParam2 = { savefileName + ".xml", "com.adobe.acrobat.xml-1-00" };
-            //object[] saveAsParam3 = { savefileName + ".docx", "com.adobe.acrobat.docx" };
-            T.InvokeMember(
-                            "saveAs",
-                            BindingFlags.InvokeMethod |
-                            BindingFlags.Public |
-                            BindingFlags.Instance,
-                            null, jsObj, saveAsParam1);
-
-            // close object
-            g_AVDoc.Close(0);
-            Console.WriteLine("Convert {0} to HTML success!", Path.GetFileName(fileName));
-            return 0;
-        }//Open file error
-        else{
-            Console.WriteLine("Open {0} failed!", fileName);
-            return 3;
-        }
-    }
-}
 
 
 static class Program
 {
-    static int Main(string[] args)
+    public class PDF2Html
     {
-        String fileName;
+        private AcroAVDoc g_AVDoc = null;
+        private String FileName = null;
+        private String SavefileName = null;
+        private String SaveDir = null;
+        private int Timeout = 60000;
+
+
+
+
+        public PDF2Html(String fileName,String saveDir,int timeout)
+        {
+            FileName = fileName;
+            SaveDir = saveDir;
+            Timeout = timeout;
+        }
+
+        public void OpenPDF()
+        {
+            g_AVDoc.Open(FileName, "");
+        }
+
+
+        public void KillProcess(String processName)
+        {
+            try{
+                //get processes of Acrobat
+                Process[] processIdAry = Process.GetProcessesByName(processName);
+                if (processIdAry.Count() > 0){
+                    for (int i = 0; i < processIdAry.Count(); i++){
+                        processIdAry[i].Kill();
+                        Console.WriteLine("Kill {0} sucessfully!", processName);
+                    }
+                }
+                else{
+                    Console.WriteLine("Not found {0} by name", processName);
+                }
+            }
+            catch{
+                Console.WriteLine("Kill {0} failed!", processName);
+            }
+        }
+
+        public void Convert()
+        {
+            
+            FileInfo fileinfo = new FileInfo(FileName);
+            //file exits
+            if (fileinfo.Exists)
+            {
+                if (g_AVDoc != null){
+                    g_AVDoc.Close(0);
+                }
+                g_AVDoc = new AcroAVDoc();
+                /*
+                 * open pdf without blocking, to avoid adobe open automatic when pdf file is invalid
+                 */
+                MethodInvoker invoker = new MethodInvoker(OpenPDF);
+                invoker.BeginInvoke(null, null);
+
+            }//file not exist
+            else{
+                Console.WriteLine("{0} not exist!", FileName);
+            }
+            /* 
+             * if open pdf success
+             * wait 200 Milliseconds to open file, to process the case which pdf is invalid, 
+             * lead to process blocking.
+             */
+            Thread.Sleep(200);
+
+            /* even if the g_AVDoc is valid, it may be the txt or html format, 
+             * which acrobat can also process, but it will lead blocking, should be killed.
+             */
+            if (g_AVDoc.IsValid())
+            {
+                    if (Directory.Exists(SaveDir))
+                    {
+                        SavefileName = SaveDir + '\\' + Path.GetFileNameWithoutExtension(FileName);
+                    }
+                    else
+                    {
+                        SavefileName = Path.GetDirectoryName(SaveDir) + Path.GetFileNameWithoutExtension(SaveDir);
+                    }
+                    SavefileName = SavefileName + ".html";
+                    if (File.Exists(SavefileName))
+                    {
+                        File.Delete(SavefileName);
+                    }
+
+                    CAcroPDDoc pdDoc = (CAcroPDDoc)g_AVDoc.GetPDDoc();
+                    //Acquire the Acrobat JavaScript Object interface from the PDDoc object
+                    Object jsObj = pdDoc.GetJSObject();
+                    Type T = jsObj.GetType();
+                    object[] saveAsParam1 = { SavefileName, "com.adobe.acrobat.html-3-20" };
+                    //object[] saveAsParam2 = { SavefileName + ".xml", "com.adobe.acrobat.xml-1-00" };
+                    //object[] saveAsParam3 = { SavefileName + ".docx", "com.adobe.acrobat.docx" };
+                    T.InvokeMember(
+                                    "saveAs",
+                                    BindingFlags.InvokeMethod |
+                                    BindingFlags.Public |
+                                    BindingFlags.Instance,
+                                    null, jsObj, saveAsParam1);
+
+ 
+                while (!File.Exists(SavefileName) && Timeout > 0){
+                    Thread.Sleep(1000);
+                    Timeout -= 1000;
+                }
+
+                if (!File.Exists(SavefileName)){
+                    Console.WriteLine("{0} is invalid pdf or too big to convert, kill Acrobat!", FileName);
+                    KillProcess("Acrobat");
+                }
+                else{
+                    g_AVDoc.Close(0);
+                    KillProcess("Acrobat");
+                    Console.WriteLine("Convert {0} to HTML success!", Path.GetFileName(FileName));
+                }
+
+            }
+            else
+            {
+                //Open file error
+                Console.WriteLine("Open {0} failed, kill Acrobat!", FileName);
+                KillProcess("Acrobat");
+            }
+
+        }
+
+    }
+
+
+    static void Main(string[] args)
+    {
+        String fileName=null;
         // set the default output dictionary
-        String saveDir = Application.StartupPath;
+        String SaveDir = Application.StartupPath;
         // check the args
         if (args.Length == 1){
             fileName = args[0];
         }
         else if (args.Length == 2){
             fileName = args[0];
-            saveDir = args[1];
+            SaveDir = args[1];
         }
         else{
             Console.WriteLine("Usage: PDF2XML.exe inputfile outputdir(optional)!");
-            return 1;
         }
 
-        /*
-         retNumber:
-            0 convert sucess
-            1 parameters error
-            2 inpout file not exist
-            3 open pdf error
-         */
+        PDF2Html Converter = new PDF2Html(fileName,SaveDir,60000);
 
-        int retNumber;
-        JSObject AdobeJS = new JSObject();
-        retNumber = AdobeJS.Convert_pdf_to_html(fileName, saveDir);
-        return retNumber;
+        Thread t = new Thread(Converter.Convert);
+        t.Start();
+        try
+        {
+            t.Abort();
+        }
+        catch
+        {
+
+        }
+       
+        //Process pro = Process.GetCurrentProcess();
+        //Console.WriteLine(pro.Id.ToString());
+
+        
+
     }
 }
