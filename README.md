@@ -30,7 +30,7 @@ cConvIDs are supported by Acrobat library. The string ids are as follows:
 cConvID| extension | comment  
 -|:-: |:-:
 com.adobe.acrobat.eps                   | 	eps                             |Not test 
-com.adobe.acrobat.html-3-20             |	html, htm                       |**Recommend**
+com.adobe.acrobat.html-3-20             |	html, htm                       |**Recommended**
 com.adobe.acrobat.html-4-01-css-1-00    |	html, htm                       |Not allowed
 com.adobe.acrobat.jpeg	                |   jpeg ,jpg, jpe                  |Not test
 com.adobe.acrobat.jp2k                  |	jpf, jpx, jp2, j2k, j2c, jpc    |Not test
