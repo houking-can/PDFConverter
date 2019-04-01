@@ -21,6 +21,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 ## Extension
 If you want to convert pdf to other formats, such as doc , txt, etc. Just modify a line code in:  
 <center>object[] saveAsParam1 = { savefileName + ".html", "com.adobe.acrobat.html-3-20" };</center>  
+
 cConvIDs are supported by Acrobat library. The string ids are as follows:  
 
 cConvID| extension | comment  
