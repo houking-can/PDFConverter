@@ -1,5 +1,5 @@
 # PDF2HTML
-Convert PDF to HTML using Adobe DC SDK . You can also convert pdf to any formats Adobe supported, like txt,xml,doc,docx,jpg,ps,rtf etc.
+Convert PDF to HTML using Adobe DC SDK . You can also convert pdf to any formats Adobe supported, like txt,xml,doc,docx,jpg,ps,rft etc.
 Notice: To run this project, you must install [Adobe Acrobat DC](https://www.adobe.com/cn/downloads.html?promoid=RL89NGY7&mv=other)
 ## Environment and Dependency 
 * Operating system: Windows 10 Professional
