@@ -8,7 +8,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 * Dependency:  
     * Acrobat   
     * Adobe Acrobat 10.0 Type Library  
-    * System Windows Forms
+    * System Windows Forms  
 They are two COM type libraries, after installing Adobe Acrobat DC, you can add reference in Visual Studio with project manager.
 
 ## How to build and run it
