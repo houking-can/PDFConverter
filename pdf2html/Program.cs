@@ -51,7 +51,7 @@ public class JSObject
 
             // close object
             g_AVDoc.Close(0);
-            Console.WriteLine("Convert PDF to HTML success.");
+            Console.WriteLine("Convert {0} to HTML success!", Path.GetFileName(fileName));
             return 0;
         }//Open file error
         else{
@@ -78,7 +78,7 @@ static class Program
             saveDir = args[1];
         }
         else{
-            Console.WriteLine("Usage: PDF2XML.exe inputfile outputdir(optional).");
+            Console.WriteLine("Usage: PDF2XML.exe inputfile outputdir(optional)!");
             return 1;
         }
 
