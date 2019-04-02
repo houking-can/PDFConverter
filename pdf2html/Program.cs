@@ -12,58 +12,106 @@ using ThreadState = System.Diagnostics.ThreadState;
 
 static class Program
 {
+
     public class PDF2Html
     {
         private AcroAVDoc g_AVDoc = null;
-        private String FileName = null;
-        private String SavefileName = null;
-        private String SaveDir = null;
-        private int Timeout = 60000;
+        public string inputFile = null;
+        public string saveFile = null;
+        public string outputDir = null;
+        public string format = null;
 
 
-
-
-        public PDF2Html(String fileName,String saveDir,int timeout)
+        public PDF2Html(string inputFile, string outputDir,string format="html")
         {
-            FileName = fileName;
-            SaveDir = saveDir;
-            Timeout = timeout;
+            this.inputFile = inputFile;
+            this.outputDir = outputDir;
+            if (format == null){
+                format = "html";
+            }
+            this.format = format;
         }
 
         public void OpenPDF()
         {
-            g_AVDoc.Open(FileName, "");
+            g_AVDoc.Open(inputFile, "");
         }
 
-
-        public void KillProcess(String processName)
+        public void ClosePDF()
         {
-            try{
+            g_AVDoc.Close(0);
+            KillProcess("Acrobat");
+        }
+
+        public string GetConvID()
+        {
+            switch(format){
+                case "html": return "com.adobe.acrobat.html";
+                case "xml": return "com.adobe.acrobat.xml-1-00";
+                case "jpeg": return "com.adobe.acrobat.jpeg";
+                case "jpe": return "com.adobe.acrobat.jpeg";
+                case "jpg": return "com.adobe.acrobat.jpeg";
+                case "png": return "com.adobe.acrobat.png";
+                case "doc": return "com.adobe.acrobat.doc";
+                case "docx": return "com.adobe.acrobat.docx";
+                case "jpf": return "com.adobe.acrobat.jp2k";
+                case "jpx": return "com.adobe.acrobat.jp2k";
+                case "jp2": return "com.adobe.acrobat.jp2k";
+                case "j2k": return "com.adobe.acrobat.jp2k";
+                case "j2c": return "com.adobe.acrobat.jp2k";
+                case "jpc": return "com.adobe.acrobat.jp2k";
+                case "ps": return "com.adobe.acrobat.ps";
+                case "txt":return "com.adobe.acrobat.plain-text";
+                case "accesstext": return "com.adobe.acrobat.accesstext	";
+                case "rtf": return "com.adobe.acrobat.rtf";
+                case "tiff": return "com.adobe.acrobat.tiff";
+                case "tif": return "com.adobe.acrobat.tiff";
+                default: return "com.adobe.acrobat.html";
+            }
+        }
+
+        public void KillProcess(string processName)
+        {
+            try {
                 //get processes of Acrobat
                 Process[] processIdAry = Process.GetProcessesByName(processName);
-                if (processIdAry.Count() > 0){
-                    for (int i = 0; i < processIdAry.Count(); i++){
+                if (processIdAry.Count() > 0) {
+                    for (int i = 0; i < processIdAry.Count(); i++) {
                         processIdAry[i].Kill();
                         Console.WriteLine("Kill {0} sucessfully!", processName);
                     }
                 }
-                else{
+                else {
                     Console.WriteLine("Not found {0} by name", processName);
                 }
             }
-            catch{
+            catch {
                 Console.WriteLine("Kill {0} failed!", processName);
             }
         }
 
+        public string SetSaveFileName()
+        {
+            if (Directory.Exists(outputDir))
+            {
+                saveFile = outputDir + '\\' + Path.GetFileNameWithoutExtension(inputFile);
+            }
+            else
+            {
+                saveFile = Path.GetDirectoryName(outputDir) + Path.GetFileNameWithoutExtension(outputDir);
+            }
+            saveFile = saveFile + "."+ format;
+            return saveFile;
+        }
+
         public void Convert()
         {
-            
-            FileInfo fileinfo = new FileInfo(FileName);
+
+            FileInfo fileinfo = new FileInfo(inputFile);
             //file exits
             if (fileinfo.Exists)
             {
-                if (g_AVDoc != null){
+                if (g_AVDoc != null) {
                     g_AVDoc.Close(0);
                 }
                 g_AVDoc = new AcroAVDoc();
@@ -74,8 +122,8 @@ static class Program
                 invoker.BeginInvoke(null, null);
 
             }//file not exist
-            else{
-                Console.WriteLine("{0} not exist!", FileName);
+            else {
+                Console.WriteLine("{0} not exist!", inputFile);
             }
             /* 
              * if open pdf success
@@ -87,58 +135,36 @@ static class Program
             /* even if the g_AVDoc is valid, it may be the txt or html format, 
              * which acrobat can also process, but it will lead blocking, should be killed.
              */
-            if (g_AVDoc.IsValid())
-            {
-                    if (Directory.Exists(SaveDir))
-                    {
-                        SavefileName = SaveDir + '\\' + Path.GetFileNameWithoutExtension(FileName);
-                    }
-                    else
-                    {
-                        SavefileName = Path.GetDirectoryName(SaveDir) + Path.GetFileNameWithoutExtension(SaveDir);
-                    }
-                    SavefileName = SavefileName + ".html";
-                    if (File.Exists(SavefileName))
-                    {
-                        File.Delete(SavefileName);
-                    }
+            if (g_AVDoc.IsValid()){
+                SetSaveFileName();
+                CAcroPDDoc pdDoc = (CAcroPDDoc)g_AVDoc.GetPDDoc();
+                //Acquire the Acrobat JavaScript Object interface from the PDDoc object
+                Object jsObj = pdDoc.GetJSObject();
+                Type T = jsObj.GetType();
+                string cConvID = GetConvID();
+                object[] saveAsParam = { saveFile, cConvID};
 
-                    CAcroPDDoc pdDoc = (CAcroPDDoc)g_AVDoc.GetPDDoc();
-                    //Acquire the Acrobat JavaScript Object interface from the PDDoc object
-                    Object jsObj = pdDoc.GetJSObject();
-                    Type T = jsObj.GetType();
-                    object[] saveAsParam1 = { SavefileName, "com.adobe.acrobat.html-3-20" };
-                    //object[] saveAsParam2 = { SavefileName + ".xml", "com.adobe.acrobat.xml-1-00" };
-                    //object[] saveAsParam3 = { SavefileName + ".docx", "com.adobe.acrobat.docx" };
-                    T.InvokeMember(
-                                    "saveAs",
-                                    BindingFlags.InvokeMethod |
-                                    BindingFlags.Public |
-                                    BindingFlags.Instance,
-                                    null, jsObj, saveAsParam1);
+                T.InvokeMember(
+                                "saveAs",
+                                BindingFlags.InvokeMethod |
+                                BindingFlags.Public |
+                                BindingFlags.Instance,
+                                null, jsObj, saveAsParam);
 
- 
-                while (!File.Exists(SavefileName) && Timeout > 0){
-                    Thread.Sleep(1000);
-                    Timeout -= 1000;
+                try{
+                    ClosePDF();
+                }catch{
+                    Console.WriteLine("PDF has been closed, no need to close again!");
                 }
-
-                if (!File.Exists(SavefileName)){
-                    Console.WriteLine("{0} is invalid pdf or too big to convert, kill Acrobat!", FileName);
-                    KillProcess("Acrobat");
-                }
-                else{
-                    g_AVDoc.Close(0);
-                    KillProcess("Acrobat");
-                    Console.WriteLine("Convert {0} to HTML success!", Path.GetFileName(FileName));
-                }
-
             }
-            else
-            {
-                //Open file error
-                Console.WriteLine("Open {0} failed, kill Acrobat!", FileName);
-                KillProcess("Acrobat");
+            else {
+                    //Open file error
+                    Console.WriteLine("Open {0} failed, kill Acrobat!", inputFile);
+                    try{
+                        ClosePDF();
+                    }catch{
+                        Console.WriteLine("PDF has been closed, no need to close again!");
+                    }
             }
 
         }
@@ -148,38 +174,72 @@ static class Program
 
     static void Main(string[] args)
     {
-        String fileName=null;
-        // set the default output dictionary
-        String SaveDir = Application.StartupPath;
-        // check the args
-        if (args.Length == 1){
-            fileName = args[0];
-        }
-        else if (args.Length == 2){
-            fileName = args[0];
-            SaveDir = args[1];
+        string inputFile = null;
+        int Timeout = 20000;  // set the default output dictionary
+        string outputDir = Application.StartupPath;
+        string format = null;
+        bool replace = false;
+        // get args
+        var arguments = CommandLineArgumentParser.Parse(args);
+        if (!arguments.Has("-i")){
+            Console.WriteLine("Usage: PDF2XML.exe \n-i inputfile \n-o outputdir\t(default: run dictionary)\n-r replace exist file\t(default:false)\n-f format\t(default: html)\n\t\t(Support: xml,txt,doc,docx,ps,jpeg,jpe,jpg,jpf,jpx,j2k,j2c,jpc,rtf,accesstext,tif,tiff)");
+            Environment.Exit(0);
         }
         else{
-            Console.WriteLine("Usage: PDF2XML.exe inputfile outputdir(optional)!");
+            inputFile = arguments.Get("-i").Next;
         }
+        if (arguments.Has("-o")) {
+            outputDir = arguments.Get("-o").Next;
+        }
+        if (arguments.Has("-f")){
+            format = arguments.Get("-f").Next;
+        }
+        if (arguments.Has("-r")){
+            if("true" == arguments.Get("-r").Next){
+                replace = true;
+            }
+        }
+        //if (arguments.Has("-t"))
+        //{
+        //    Timeout = arguments.Get("-t").Next;
+            
+        //}
 
-        PDF2Html Converter = new PDF2Html(fileName,SaveDir,60000);
-
-        Thread t = new Thread(Converter.Convert);
+        PDF2Html P2H = new PDF2Html(inputFile, outputDir, format);
+        string saveFile = P2H.SetSaveFileName();
+        if (File.Exists(saveFile))
+        {
+            if (replace){
+                File.Delete(saveFile);
+            }
+            else{
+                Console.WriteLine("{0} exists, to replace it, using -t true!",saveFile);
+                Environment.Exit(0);
+            }
+        }
+        Thread t = new Thread(P2H.Convert);
         t.Start();
-        try
-        {
-            t.Abort();
-        }
-        catch
-        {
-
-        }
-       
-        //Process pro = Process.GetCurrentProcess();
-        //Console.WriteLine(pro.Id.ToString());
-
         
-
+        while (true)
+        {
+            if (File.Exists(saveFile) || Timeout <= 0){
+                try{
+                    P2H.ClosePDF();
+                }catch{
+                    Console.WriteLine("PDF has been closed, no need to close again!");
+                }
+                break;
+            }
+            Thread.Sleep(1000);
+            Timeout -= 1000;
+        }
+        if (!File.Exists(saveFile)){
+            Console.WriteLine("{0} is invalid pdf or too big to convert, kill Acrobat!", inputFile);
+        }
+        else{
+            Console.WriteLine("Convert {0} to {1} success!", Path.GetFileName(inputFile), format);
+        }
+        Console.WriteLine(Timeout);
     }
 }
+
