@@ -1,3 +1,5 @@
 .vs/
 .git/
 *.cashe
+pdf2html/bin
+pdf2html/obj
