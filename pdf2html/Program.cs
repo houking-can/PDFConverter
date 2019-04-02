@@ -6,8 +6,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using ThreadState = System.Diagnostics.ThreadState;
-
 
 
 static class Program
@@ -175,14 +173,23 @@ static class Program
     static void Main(string[] args)
     {
         string inputFile = null;
-        int Timeout = 20000;  // set the default output dictionary
+        int timeout = 20000;  // set the default output dictionary
         string outputDir = Application.StartupPath;
         string format = null;
         bool replace = false;
         // get args
         var arguments = CommandLineArgumentParser.Parse(args);
         if (!arguments.Has("-i")){
-            Console.WriteLine("Usage: PDF2XML.exe \n-i inputfile \n-o outputdir\t(default: run dictionary)\n-r replace exist file\t(default:false)\n-f format\t(default: html)\n\t\t(Support: xml,txt,doc,docx,ps,jpeg,jpe,jpg,jpf,jpx,j2k,j2c,jpc,rtf,accesstext,tif,tiff)");
+            Console.WriteLine("Usage: PDF2XML.exe \n" +
+                "-i inputfile \n" +
+                "-o outputdir\tdefault: run dictionary)\n" +
+                "-r replace exist file\t(default:false)\n" +
+                "-f format\tdefault: html\n\t\t" +
+                "Support: xml,txt,doc,docx,\n\t\t" +
+                "ps,jpeg,jpe,jpg,\n\t\t" +
+                "jpf,jpx,j2k,j2c,jpc,rtf,\n\t\t" +
+                "accesstext,tif,tiff)\n" +
+                "-h help\n");
             Environment.Exit(0);
         }
         else{
@@ -199,9 +206,32 @@ static class Program
                 replace = true;
             }
         }
-        //if (arguments.Has("-t"))
+        if (arguments.Has("-t"))
+        {
+            try{
+                timeout = Convert.ToInt32(arguments.Get("-t").Next);
+            }
+            catch {
+                timeout = 20000;
+            }
+        }
+        if (arguments.Has("-h")) {
+            Console.WriteLine("Usage: PDF2XML.exe \n" +
+                "-i inputfile \n" +
+                "-o outputdir\tdefault: run dictionary)\n" +
+                "-r replace exist file\t(default:false)\n" +
+                "-t timeout default: 20000ms\n" +
+                "-f format\tdefault: html\n\t\t" +
+                "support: xml,txt,doc,docx,\n\t\t" +
+                "ps,jpeg,jpe,jpg,\n\t\t" +
+                "jpf,jpx,j2k,j2c,jpc,rtf,\n\t\t" +
+                "accesstext,tif,tiff)\n" +
+                "-h help\n");
+            Environment.Exit(0);
+        }
+        //if (arguments.Has("-t")) -h
         //{
-        //    Timeout = arguments.Get("-t").Next;
+        //    timeout = arguments.Get("-t").Next;
             
         //}
 
@@ -222,7 +252,7 @@ static class Program
         
         while (true)
         {
-            if (File.Exists(saveFile) || Timeout <= 0){
+            if (File.Exists(saveFile) || timeout <= 0){
                 try{
                     P2H.ClosePDF();
                 }catch{
@@ -231,7 +261,7 @@ static class Program
                 break;
             }
             Thread.Sleep(1000);
-            Timeout -= 1000;
+            timeout -= 1000;
         }
         if (!File.Exists(saveFile)){
             Console.WriteLine("{0} is invalid pdf or too big to convert, kill Acrobat!", inputFile);
@@ -239,7 +269,6 @@ static class Program
         else{
             Console.WriteLine("Convert {0} to {1} success!", Path.GetFileName(inputFile), format);
         }
-        Console.WriteLine(Timeout);
     }
 }
 
