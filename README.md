@@ -16,16 +16,13 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 2. Add references, click the COM in references manager and select Acrobat and Adobe Acrobat 10.0 Type Library.
 3. To run this project, you need add command parameters in project manager, the input file  complete path and output dictionary(optional, if not specify, it will save the output file where the executable file in). You can also use console to run the executable file as follows:
 ```
-    pdf2html.exe inputfile outputdir
+    pdf2html.exe -i inputfile -o outputdir -r true -t 20000
 ```
 4. If you run this repository directly, you may skip step 1 and 2. Just compile and run in Visual Studio.
 
 ## Extension
-If you want to convert pdf to other formats, such as doc . Just modify a line code in:  
-```  
-object[] saveAsParam1 = { savefileName + ".html", "com.adobe.acrobat.html-3-20" };  
-```
-with the cConvIDs supported by Acrobat library. The list of cConvIDs are as follows:  
+If you want to convert pdf to other formats, 
+The cConvIDs supported by Acrobat library. The list of cConvIDs are as follows:  
 
 cConvID| extension | comment  
 -|:-: |:-:
