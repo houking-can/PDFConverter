@@ -19,6 +19,8 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
     pdf2html.exe -i inputfile -o outputdir -r true -t 20000
 ```
 4. If you run this repository directly, you may skip step 1 and 2. Just compile and run in Visual Studio.
+5. gen_bat.py is a tool to generate windows bat file, to speed up the convert process, you can use multi-threading.  
+
 
 ## Extension
 If you want to convert pdf to other formats, 
