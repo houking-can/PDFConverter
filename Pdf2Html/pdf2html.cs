@@ -205,13 +205,14 @@ static class Program
         PDF2Html P2H = new PDF2Html(inputFile, outputDir, format);
         string saveFile = P2H.SetSaveFileName();
         if (File.Exists(saveFile)){
-            if (replace){
-                File.Delete(saveFile);
-            }
-            else{
-                Console.WriteLine("{0} exists, to replace it, using -r true!", saveFile);
-                Environment.Exit(0);
-            }
+            Environment.Exit(0);
+            //if (replace){
+            //    Environment.Exit(0);
+            //}
+            //else{
+            //    Console.WriteLine("{0} exists, to replace it, using -r true!", saveFile);
+            //    Environment.Exit(0);
+            //}
         }
         Thread convert = new Thread(P2H.Convert);
         convert.Start();

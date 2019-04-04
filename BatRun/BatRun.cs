@@ -18,9 +18,11 @@ class Run
     public string format { get; set; }
     public int timeout { get; set; }
     public string replace { get; set; }
+    public int start { get; set; }
     public string fullpath = null;
     public Process cur_p = null;
     public Thread cur_t = null;
+    
     public void RunSingle()
     {
         string cmd = exePath + " -i " + fullpath + " -o " + outputDir + " -r " + replace + " -f " + format;
@@ -52,11 +54,14 @@ class Run
     {
         DirectoryInfo root = new DirectoryInfo(inputFile);
         FileInfo[] files = root.GetFiles();
-        for (int i = 0; i < files.Length; i++)
+        Console.WriteLine(start);
+
+        for (int i = start; i < files.Length; i++)
         {
             try
             {
                 fullpath = files[i].FullName;
+
                 //RunSingle();
                 Console.WriteLine(fullpath);
                 Thread t = new Thread(RunSingle);
@@ -92,7 +97,6 @@ class Run
                 Console.WriteLine(e);
             }
         }
-
     }
 
     private void TimerElapsed()
@@ -216,6 +220,9 @@ class Run
                     "-h help\n");
                 Environment.Exit(0);
             }
+            DirectoryInfo tmp = new DirectoryInfo(outputDir);
+            int start = tmp.GetFiles().Length;
+
             Run run = new Run
             {
                 exePath = exePath,
@@ -224,7 +231,8 @@ class Run
                 format = format,
                 timeout = timeout,
                 replace = replace,
-                fullpath = inputFile
+                fullpath = inputFile,
+                start = start
             };
 
             if (Directory.Exists(inputFile))
