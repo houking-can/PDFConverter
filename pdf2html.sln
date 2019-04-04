@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdf2html", "pdf2html\pdf2html.csproj", "{331E9E16-34D8-4655-A638-FC24E01F0E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdf2Html", "pdf2html\Pdf2Html.csproj", "{331E9E16-34D8-4655-A638-FC24E01F0E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatRun", "BatRun\BatRun.csproj", "{7ADFA3CC-686F-4318-A563-A99D209DDB73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{331E9E16-34D8-4655-A638-FC24E01F0E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{331E9E16-34D8-4655-A638-FC24E01F0E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{331E9E16-34D8-4655-A638-FC24E01F0E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADFA3CC-686F-4318-A563-A99D209DDB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADFA3CC-686F-4318-A563-A99D209DDB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADFA3CC-686F-4318-A563-A99D209DDB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADFA3CC-686F-4318-A563-A99D209DDB73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
