@@ -1,7 +1,7 @@
 .vs/
 .git/
 *.cashe
-pdf2html/Pdf2Html/bin
-pdf2html/BatRun/obj
-pdf2html/BatRun/bin
-pdf2html/BatRun/obj
+./Pdf2Html/bin
+./BatRun/obj
+./BatRun/bin
+./Pdf2Html/obj
