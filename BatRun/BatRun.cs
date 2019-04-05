@@ -20,6 +20,7 @@ class Run
     public string replace { get; set; }
     public int start { get; set; }
     public string fullpath = null;
+    public string savepath = null;
     public Process cur_p = null;
     public Thread cur_t = null;
     
@@ -52,44 +53,52 @@ class Run
 
     public void RunBat()
     {
-        DirectoryInfo root = new DirectoryInfo(inputFile);
-        FileInfo[] files = root.GetFiles();
-        Console.WriteLine(start);
-
+        FileInfo[] files= {null};
+        if (Directory.Exists(inputFile))
+        {
+            DirectoryInfo root = new DirectoryInfo(inputFile);
+            files = root.GetFiles();
+            Console.WriteLine("start with: {0}\n",start);
+        }
+        else if (File.Exists(inputFile))
+        {
+            FileInfo single =  new FileInfo(inputFile);
+            files[0] = single;
+        }
+        else
+        {
+            Console.WriteLine("Can not open: {0}", inputFile);
+            return;
+        }
         for (int i = start; i < files.Length; i++)
         {
             try
             {
                 fullpath = files[i].FullName;
-
-                //RunSingle();
+                
                 Console.WriteLine(fullpath);
+                savepath  = outputDir + '\\' + Path.GetFileNameWithoutExtension(fullpath) + "." + format;
+                //Console.WriteLine(savepath);
                 Thread t = new Thread(RunSingle);
                 t.Start();
+
                 Thread timer = new Thread(TimerElapsed);
                 timer.Start();
-                t.Join();
+                timer.Join();
 
-                if (cur_t != null)
-                {
-                    try
-                    {
-                        //Console.WriteLine("kill thread: {0}", t.ManagedThreadId);
-                        cur_t.Abort();
-                    }
-                    catch (Exception excep)
-                    {
-                        //Console.WriteLine(excep);
-                    }
-                }
-                if (File.Exists(fullpath))
-                {
-                    Console.WriteLine("convert sucessfully!");
-                }
-                else
-                {
-                    Console.WriteLine("convert failed!");
-                }
+                //if (cur_t != null)
+                //{
+                //    try
+                //    {
+                //        //Console.WriteLine("kill thread: {0}", t.ManagedThreadId);
+                //        cur_t.Abort();
+                //    }
+                //    catch (Exception excep)
+                //    {
+                //        //Console.WriteLine(excep);
+                //    }
+                //}
+                
 
             }
             catch (Exception e)
@@ -98,49 +107,69 @@ class Run
             }
         }
     }
-
+    public void KillProcessAndChildren(int pid)
+    {
+        ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid);
+        ManagementObjectCollection moc = searcher.Get();
+        foreach (ManagementObject mo in moc)
+        {
+            KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
+        }
+        try
+        {
+            Process proc = Process.GetProcessById(pid);
+            //Console.WriteLine(pid);
+            proc.Kill();
+        }
+        catch (ArgumentException)
+        {
+            /* process already exited */
+        }
+    }
     private void TimerElapsed()
     {
         int total = timeout;
-        while (total > 0)
+        while (total > 0 && !File.Exists(savepath))
         {
-            //Console.WriteLine(total);
+            Console.WriteLine(total);
             Thread.Sleep(1000);
             total -= 1000;
         }
 
-        void KillProcessAndChildren(int pid)
+        if (File.Exists(savepath))
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid);
-            ManagementObjectCollection moc = searcher.Get();
-            foreach (ManagementObject mo in moc)
-            {
-                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
-            }
-            try
-            {
-                Process proc = Process.GetProcessById(pid);
-                //Console.WriteLine(pid);
-                proc.Kill();
-            }
-            catch (ArgumentException)
-            {
-                /* process already exited */
-            }
+            Console.WriteLine("convert sucessfully!\n");
         }
-        if (cur_p != null)
+        else
         {
-            try
+            Console.WriteLine("convert failed!\n");
+            //Thread.Sleep(2000);
+            if (cur_p != null)
             {
-                //Console.WriteLine("kill process: {0}", p.Id);
-                KillProcessAndChildren(cur_p.Id);
+                try
+                {
+                    //Console.WriteLine("kill process: {0}", p.Id);
+                    KillProcessAndChildren(cur_p.Id);
+                }
+                catch (Exception excep)
+                {
+                    //Console.WriteLine(excep);
+                }
             }
-            catch (Exception excep)
-            {
-                //Console.WriteLine(excep);
-            }
-        }
 
+            Process[] P = Process.GetProcessesByName("Acrobat");
+            foreach (Process p in P)
+            {
+                try
+                {
+                    KillProcessAndChildren(p.Id);
+                }
+                catch
+                {
+
+                }
+            }
+        }
         
     }
 
@@ -235,15 +264,8 @@ class Run
                 start = start
             };
 
-            if (Directory.Exists(inputFile))
-            {
-                run.RunBat();
-            }
-            else
-            {
-                run.RunSingle();
-            }
-
+            run.RunBat();
+           
         }
     }
 }

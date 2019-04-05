@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>-e  C:\Users\Houking\Desktop\pdf2html\Pdf2Html\bin\Debug\pdf2html.exe -i C:\Users\Houking\Desktop\extract_pdf\IJCAI_1 -o C:\Users\Houking\Desktop\output -t 20000 -r true</StartArguments>
+    <StartArguments>-e  C:\Users\Houking\Desktop\pdf2html\Pdf2Html\bin\Debug\pdf2html.exe -i C:\Users\Houking\Desktop\extract_pdf\IJCAI -o C:\Users\Houking\Desktop\output -t 20000 -r true</StartArguments>
   </PropertyGroup>
 </Project>
