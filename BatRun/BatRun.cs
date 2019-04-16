@@ -21,6 +21,8 @@ class Run
     public int start { get; set; }
     public string fullpath = null;
     public string savepath = null;
+    public int index = 0;
+    public int all = 0;
     public Process cur_p = null;
     public Thread cur_t = null;
     
@@ -70,15 +72,18 @@ class Run
             Console.WriteLine("Can not open: {0}", inputFile);
             return;
         }
+        all = files.Length;
         for (int i = start; i < files.Length; i++)
         {
             try
             {
+                index = i;
                 fullpath = files[i].FullName;
                 
-                Console.WriteLine(fullpath);
+                //Console.WriteLine(fullpath);
                 savepath  = outputDir + '\\' + Path.GetFileNameWithoutExtension(fullpath) + "." + format;
                 //Console.WriteLine(savepath);
+
                 Thread t = new Thread(RunSingle);
                 t.Start();
 
@@ -107,6 +112,18 @@ class Run
             }
         }
     }
+
+    public void DeleteFiles(string dir)
+    {
+        DirectoryInfo di = new DirectoryInfo(dir);
+        if (di.GetDirectories().Length == 0 && di.GetFiles().Length == 0) return;
+        foreach (DirectoryInfo d in di.GetDirectories())
+            DeleteFiles(d.FullName);
+        foreach (FileInfo fi in di.GetFiles())
+            fi.Delete();
+        di.Delete();
+    }
+
     public void KillProcessAndChildren(int pid)
     {
         ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid);
@@ -126,51 +143,72 @@ class Run
             /* process already exited */
         }
     }
+
+
+    public void KillAcrobat()
+    {
+        if (cur_p != null)
+        {
+            try
+            {
+                //Console.WriteLine("kill process: {0}", p.Id);
+                KillProcessAndChildren(cur_p.Id);
+            }
+            catch (Exception excep)
+            {
+                //Console.WriteLine(excep);
+            }
+        }
+
+        Process[] P = Process.GetProcessesByName("Acrobat");
+        foreach (Process p in P)
+        {
+            try
+            {
+                KillProcessAndChildren(p.Id);
+            }
+            catch
+            {
+
+            }
+        }
+    }
+
     private void TimerElapsed()
     {
+
+
         int total = timeout;
         while (total > 0 && !File.Exists(savepath))
         {
-            Console.WriteLine(total);
+            //Console.WriteLine(total);
             Thread.Sleep(1000);
             total -= 1000;
         }
 
         if (File.Exists(savepath))
         {
-            Console.WriteLine("convert sucessfully!\n");
+            Console.WriteLine("{0}/{1} sucessfully!\n",index,all);
+            if (index % 20 == 0)
+            {
+                //Console.WriteLine("kill acrobat!\n");
+                KillAcrobat();
+            }
         }
         else
         {
-            Console.WriteLine("convert failed!\n");
+            Console.WriteLine("{0}/{1} failed!\n\n", index, all);
+            string tmp_name = outputDir + '\\' + Path.GetFileNameWithoutExtension(fullpath) + ".skip";
+            FileStream fw = new FileStream(tmp_name, FileMode.Create, FileAccess.Write);
+            fw.Close();
+            KillAcrobat();
             //Thread.Sleep(2000);
-            if (cur_p != null)
-            {
-                try
-                {
-                    //Console.WriteLine("kill process: {0}", p.Id);
-                    KillProcessAndChildren(cur_p.Id);
-                }
-                catch (Exception excep)
-                {
-                    //Console.WriteLine(excep);
-                }
-            }
 
-            Process[] P = Process.GetProcessesByName("Acrobat");
-            foreach (Process p in P)
-            {
-                try
-                {
-                    KillProcessAndChildren(p.Id);
-                }
-                catch
-                {
-
-                }
-            }
         }
-        
+        if (Directory.Exists(outputDir + '\\' + Path.GetFileNameWithoutExtension(fullpath)))
+        {
+            DeleteFiles(outputDir + '\\' + Path.GetFileNameWithoutExtension(fullpath));
+        }
     }
 
     class BatRun
