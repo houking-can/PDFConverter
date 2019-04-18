@@ -4,3 +4,4 @@ C:\Users\Houking\Desktop\pdf2html\BatRun\bin\Debug\BatRun.pdb
 C:\Users\Houking\Desktop\pdf2html\BatRun\obj\Debug\BatRun.csproj.CoreCompileInputs.cache
 C:\Users\Houking\Desktop\pdf2html\BatRun\obj\Debug\BatRun.exe
 C:\Users\Houking\Desktop\pdf2html\BatRun\obj\Debug\BatRun.pdb
+C:\Users\Houking\Desktop\pdf2html\BatRun\obj\Debug\BatRun.csprojAssemblyReference.cache

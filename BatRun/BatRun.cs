@@ -189,7 +189,7 @@ class Run
         if (File.Exists(savepath))
         {
             Console.WriteLine("{0}/{1} sucessfully!\n",index,all);
-            if (index % 20 == 0)
+            if (index % 10 == 0)
             {
                 //Console.WriteLine("kill acrobat!\n");
                 KillAcrobat();
