@@ -157,7 +157,7 @@ static class Program
         string inputFile = null;
         string outputDir = Application.StartupPath;
         string format = null;
-        bool replace = false;
+        bool replace = true;
         // get args
         var arguments = CommandLineArgumentParser.Parse(args);
         if (!arguments.Has("-i")){
