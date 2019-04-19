@@ -59,12 +59,19 @@ def main(args):
 
     files = list(iter_files(args.input))
     for id, file in enumerate(files):
-        cmd = "%s -i %s -o %s -f %s" % (args.exe, file, args.output, args.format)
-        thread = threading.Thread(target=pdf2html, args=(cmd,))
-        thread.start()
+        
         name, _ = os.path.splitext(os.path.basename(file))
         dir_name = join(args.output, name)
         save_path = join(args.output, name + '.' + args.format)
+        if os.path.exists(save_path):
+            print('%d/%d done!' % (id, len(files)))
+            movefile(file,dir_name,old_path)
+            continue
+            
+        cmd = "%s -i %s -o %s -f %s" % (args.exe, file, args.output, args.format)
+        thread = threading.Thread(target=pdf2html, args=(cmd,))
+        thread.start()
+       
         start_time = time.time()
         while True:
             if os.path.exists(save_path):
@@ -75,8 +82,7 @@ def main(args):
                 kill_tasks()
                 break
         # print(time.time() - start_time)
-        move_thread = threading.Thread(target=movefile, args=(file,dir_name,old_path))
-        move_thread.start()
+        movefile(file,dir_name,old_path)
 
         if id%20==0:
             kill_tasks()
