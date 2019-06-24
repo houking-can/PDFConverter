@@ -44,6 +44,7 @@ com.adobe.acrobat.accesstext 	        |   txt                             |Not t
 com.adobe.acrobat.plain-text	        |	txt                             |May extract none or should click button
 com.adobe.acrobat.tiff	                |   tiff, tif                       |Not test
 com.adobe.acrobat.xml-1-00 	            |   xml                             |May extract none or should click button
+com.adobe.acrobat.xlsx                  |   xlsx                            |Not test
 
 In Acrobat 10.0 
 
