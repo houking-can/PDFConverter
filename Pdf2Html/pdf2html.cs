@@ -58,6 +58,7 @@ static class Program
                 case "rtf": return "com.adobe.acrobat.rtf";
                 case "tiff": return "com.adobe.acrobat.tiff";
                 case "tif": return "com.adobe.acrobat.tiff";
+                case "xlsx" : return "com.adobe.acrobat.xlsx";
                 default: return "com.adobe.acrobat.html";
             }
         }

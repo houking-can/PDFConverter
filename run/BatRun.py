@@ -108,13 +108,13 @@ if __name__ == '__main__':
                         help='Path of pdf2html.exe')
     parser.add_argument('--replace', '-r', default=False, action='store',
                         help='Whether replace exist files')
-    parser.add_argument('--timeout', '-t', type=float, default=20, action='store',
+    parser.add_argument('--timeout', '-t', type=float, default=80, action='store',
                         help='Timeout for a single convert')
     parser.add_argument('--format', '-f', default='html', action='store',
                         help='Format you want to convert: '
                              'xml, txt, doc, docx, '
                              'ps, jpeg, jpe, jpg, jpf, '
-                             'jpx, j2k, j2c, jpc, rtf, '
+                             'jpx, j2k, j2c, jpc, rtf, xlsx'
                              'accesstext, tif, tiff')
     args=parser.parse_args()
     main(args)

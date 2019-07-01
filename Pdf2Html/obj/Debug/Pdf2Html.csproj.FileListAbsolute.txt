@@ -6,4 +6,3 @@ C:\Users\Houking\Desktop\pdf2html\pdf2html\obj\Debug\Pdf2Html.csproj.ResolveComR
 C:\Users\Houking\Desktop\pdf2html\pdf2html\obj\Debug\Pdf2Html.csproj.CoreCompileInputs.cache
 C:\Users\Houking\Desktop\pdf2html\pdf2html\obj\Debug\pdf2html.exe
 C:\Users\Houking\Desktop\pdf2html\pdf2html\obj\Debug\pdf2html.pdb
-C:\Users\Houking\Desktop\pdf2html\pdf2html\obj\Debug\Pdf2Html.csprojAssemblyReference.cache
