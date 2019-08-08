@@ -3,20 +3,13 @@ using System.IO;
 using Acrobat;
 using System.Reflection;
 using System.Threading;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 static class Program
 {
 
-    public class PDF2Html
+    public class PDFConvert
     {
         private AcroAVDoc g_AVDoc = null;
         public string inputFile = null;
@@ -32,9 +25,9 @@ static class Program
 
         [DllImport("user32.dll ")]
         public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childe, string strclass, string FrmText);
-    
 
-        public PDF2Html(string inputFile, string outputDir, string format = "html")
+
+        public PDFConvert(string inputFile, string outputDir, string format = "html")
         {
             this.inputFile = inputFile;
             this.outputDir = outputDir;
@@ -44,7 +37,7 @@ static class Program
             }
             this.format = format;
         }
-       
+
 
         public void OpenPDF()
         {
@@ -76,7 +69,7 @@ static class Program
                 case "rtf": return "com.adobe.acrobat.rtf";
                 case "tiff": return "com.adobe.acrobat.tiff";
                 case "tif": return "com.adobe.acrobat.tiff";
-                case "xlsx" : return "com.adobe.acrobat.xlsx";
+                case "xlsx": return "com.adobe.acrobat.xlsx";
                 default: return "com.adobe.acrobat.html";
             }
         }
@@ -103,7 +96,8 @@ static class Program
             //file exits
             if (fileinfo.Exists)
             {
-                if (g_AVDoc != null){
+                if (g_AVDoc != null)
+                {
                     g_AVDoc.Close(0);
                 }
                 g_AVDoc = new AcroAVDoc();
@@ -132,7 +126,7 @@ static class Program
             {
                 SetSaveFileName();
                 CAcroPDDoc pdDoc = (CAcroPDDoc)g_AVDoc.GetPDDoc();
-                //Acquire the pdf2html JavaScript Object interface from the PDDoc object
+                //Acquire the PDFConvert JavaScript Object interface from the PDDoc object
                 Object jsObj = pdDoc.GetJSObject();
                 Type T = jsObj.GetType();
                 string cConvID = GetConvID();
@@ -145,7 +139,8 @@ static class Program
                                 BindingFlags.Instance,
                                 null, jsObj, saveAsParam);
 
-                try{
+                try
+                {
                     g_AVDoc.Close(0);
                 }
                 catch
@@ -156,8 +151,9 @@ static class Program
             else
             {
                 //Open file error
-                Console.WriteLine("Open {0} failed, kill pdf2html!", inputFile);
-                try{
+                Console.WriteLine("Open {0} failed, kill PDFConvert!", inputFile);
+                try
+                {
                     g_AVDoc.Close(0);
                 }
                 catch
@@ -166,24 +162,23 @@ static class Program
                 }
             }
 
-        } 
+        }
 
     }
-   
+
 
     static void Main(string[] args)
     {
         string inputFile = null;
         string outputDir = Application.StartupPath;
         string format = null;
-        bool replace = true;
         // get args
         var arguments = CommandLineArgumentParser.Parse(args);
-        if (!arguments.Has("-i")){
-            Console.WriteLine("Usage: PDF2XML.exe \n" +
+        if (!arguments.Has("-i"))
+        {
+            Console.WriteLine("Usage: PDFConvert.exe \n" +
                 "-i inputfile \n" +
                 "-o outputdir\tdefault: run dictionary)\n" +
-                "-r replace exist file\t(default:false)\n" +
                 "-f format\tdefault: html\n\t\t" +
                 "Support: xml,txt,doc,docx,\n\t\t" +
                 "ps,jpeg,jpe,jpg,\n\t\t" +
@@ -192,27 +187,24 @@ static class Program
                 "-h help\n");
             Environment.Exit(0);
         }
-        else{
+        else
+        {
             inputFile = arguments.Get("-i").Next;
         }
-        if (arguments.Has("-o")){
+        if (arguments.Has("-o"))
+        {
             outputDir = arguments.Get("-o").Next;
         }
-        if (arguments.Has("-f")){
+        if (arguments.Has("-f"))
+        {
             format = arguments.Get("-f").Next;
         }
-        if (arguments.Has("-r")){
-            if ("true" == arguments.Get("-r").Next){
-                replace = true;
-            }
-        }
-        
-        if (arguments.Has("-h")){
-            Console.WriteLine("Usage: PDF2XML.exe \n" +
+
+        if (arguments.Has("-h"))
+        {
+            Console.WriteLine("Usage: PDFConvert.exe \n" +
                 "-i inputfile \n" +
                 "-o outputdir\tdefault: run dictionary)\n" +
-                "-r replace exist file\t(default:false)\n" +
-                "-f format\tdefault: html\n\t\t" +
                 "support: xml,txt,doc,docx,\n\t\t" +
                 "ps,jpeg,jpe,jpg,\n\t\t" +
                 "jpf,jpx,j2k,j2c,jpc,rtf,\n\t\t" +
@@ -221,19 +213,13 @@ static class Program
             Environment.Exit(0);
         }
 
-        PDF2Html P2H = new PDF2Html(inputFile, outputDir, format);
-        string saveFile = P2H.SetSaveFileName();
-        if (File.Exists(saveFile)){
+        PDFConvert PDF = new PDFConvert(inputFile, outputDir, format);
+        string saveFile = PDF.SetSaveFileName();
+        if (File.Exists(saveFile))
+        {
             Environment.Exit(0);
-            //if (replace){
-            //    Environment.Exit(0);
-            //}
-            //else{
-            //    Console.WriteLine("{0} exists, to replace it, using -r true!", saveFile);
-            //    Environment.Exit(0);
-            //}
         }
-        Thread convert = new Thread(P2H.Convert);
+        Thread convert = new Thread(PDF.Convert);
         convert.Start();
         convert.Join();
     }

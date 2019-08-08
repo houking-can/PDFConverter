@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("pdf2html")]
+[assembly: AssemblyTitle("PDFConvert")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("pdf2html")]
+[assembly: AssemblyProduct("PDFConvert")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("331e9e16-34d8-4655-a638-fc24e01f0e95")]
+[assembly: Guid("effd16e5-0811-44f5-a84b-fb176f4c98c1")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

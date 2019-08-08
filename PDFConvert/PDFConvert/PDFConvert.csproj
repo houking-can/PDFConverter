@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{331E9E16-34D8-4655-A638-FC24E01F0E95}</ProjectGuid>
+    <ProjectGuid>{EFFD16E5-0811-44F5-A84B-FB176F4C98C1}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>pdf2html</RootNamespace>
-    <AssemblyName>pdf2html</AssemblyName>
+    <RootNamespace>PDFConvert</RootNamespace>
+    <AssemblyName>PDFConvert</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="CommandLineArgumentParser.cs" />
-    <Compile Include="Pdf2Html.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
