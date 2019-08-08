@@ -2,8 +2,16 @@
 using System.IO;
 using Acrobat;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Threading;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 static class Program
 {
@@ -15,6 +23,16 @@ static class Program
         public string saveFile = null;
         public string outputDir = null;
         public string format = null;
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll", EntryPoint = "SendMessage")]
+        private static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, string lParam);
+
+        [DllImport("user32.dll ")]
+        public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childe, string strclass, string FrmText);
+    
 
         public PDF2Html(string inputFile, string outputDir, string format = "html")
         {
