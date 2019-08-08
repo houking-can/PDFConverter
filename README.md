@@ -21,7 +21,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 ```
 4. If you run this repository directly, you may skip step 1 and 2. Just compile and run in Visual Studio.
 
-#### Batch process with Python (Controller)
+### Batch process with Python (Controller)
 
 ``` 
  python BatRun.py -e  C:\Users\~\PDFConvert.exe -i C:\Users\~ -o C:\Users\~ -f xml -t 60
