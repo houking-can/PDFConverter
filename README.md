@@ -63,7 +63,7 @@ Refer to [Acrobat SDK and documents](https://www.adobe.com/devnet/acrobat/docume
 ## Comparison
 
 Format|	Convert speed|	Extract table| Complete	| Analyze
--|:-: |:-: | :-: |:-:
+:-: |:-: |:-: | :-: |:-:
 XML |  Fast |	Yes|	Good|	Easy
 Word|  Slow |	Yes|	Good|	General
 Excel| General| Yes|    Great|	Hard
