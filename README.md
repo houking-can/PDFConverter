@@ -60,6 +60,17 @@ com.adobe.acrobat.htm l- 4-01-css-1-00 | com.adobe.acrobat.html
 
 Refer to [Acrobat SDK and documents](https://www.adobe.com/devnet/acrobat/documentation.html) to learn more. You can download the SDK package, and develop application on the samples.
 
+## Comparison
+
+Format|	Convert speed|	Extract table| Complete	| Analyze
+-|:-: |:-: | :-: |:-:
+XML |  Fast |	Yes|	Good|	Easy
+Word|  Slow |	Yes|	Good|	General
+Excel| General| Yes|    Great|	Hard
+TXT	|  Fatest|	No|	    General|	Hardest
+HTML|  Slow|	Yes|	Best|   Easy
+
+
 # Statement
 The source code is for learning and communication only.   
 Please contact [Adobe](https://www.adobe.com/cn/) for commercial use.
