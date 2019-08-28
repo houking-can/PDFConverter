@@ -28,7 +28,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 ```
 
 ## Architecture 
-![](architecture.png)
+![](Architecture.png)
 
 ## Extension
 If you want to convert pdf to other formats, 
