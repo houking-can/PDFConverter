@@ -27,6 +27,9 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
  python BatRun.py -e  C:\Users\~\PDFConvert.exe -i C:\Users\~ -o C:\Users\~ -f xml -t 60
 ```
 
+## Architecture 
+![](architecture.png)
+
 ## Extension
 If you want to convert pdf to other formats, 
 The cConvIDs supported by Acrobat library. The list of cConvIDs are as follows:  
