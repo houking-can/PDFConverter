@@ -184,6 +184,10 @@ def main(args):
                     fail.flush()
                     break
             if time.time() - start_time > args.timeout:
+                print('Timeout! %d/%d fail!' % (id + 1, len(files)))
+                kill_tasks()
+                fail.write(file + '\n')
+                fail.flush()
                 break
             blocking()
 
@@ -206,7 +210,7 @@ if __name__ == '__main__':
                         help='Path of pdf2html.exe')
     parser.add_argument('--replace', '-r', default=True, action='store',
                         help='Whether replace exist files')
-    parser.add_argument('--timeout', '-t', type=float, default=180, action='store',
+    parser.add_argument('--timeout', '-t', type=float, default=15, action='store',
                         help='Timeout for a single convert')
     parser.add_argument('--format', '-f', default='xml', action='store',
                         help='Format you want to convert: '
