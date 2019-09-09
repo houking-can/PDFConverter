@@ -8,7 +8,7 @@ import win32gui
 from os.path import exists, join
 from subprocess import Popen, PIPE, STDOUT
 from xml.dom.minidom import parse
-
+from bs4 import BeautifulSoup
 import win32con
 import xlrd
 from docx import Document
@@ -16,6 +16,15 @@ from docx import Document
 
 def check(file, args):
     check_time = time.time()
+    if args.format == 'html':
+        while time.time()-check_time < args.timeout:
+            blocking()
+            try:
+                _ = BeautifulSoup(open(file, encoding='utf-8'), "lxml")
+                return True
+            except:
+                continue
+        return False
     if args.format == 'xml':
         while time.time() - check_time < args.timeout:
             blocking()
