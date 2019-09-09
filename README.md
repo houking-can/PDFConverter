@@ -35,9 +35,8 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 ```
 **Dependency**  
 - python3.5+
-- win32api
+- pywin32
 - BeautifulSoup4
-- win32con
 - docx
 - xlrd
 ## Architecture 
