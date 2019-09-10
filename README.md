@@ -40,7 +40,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 - docx
 - xlrd  
 
-**Notice**
+**Notice**  
 If you run this python command in cmd or Powershell of Windows10, you'd be better disable 'QuickEdit Mode' and 'Insert Mode' every time to avoid the processes stuck in suspended state.  Simply right click up the top of your powershell console, head down to properties and under Edit options you will see 'QuickEdit Mode'.
 ## Architecture 
 
