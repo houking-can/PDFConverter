@@ -41,7 +41,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 - xlrd
 ## Architecture 
 
-![](Architecture.png)
+![](architecture.png)
 
 ## Extension
 
