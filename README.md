@@ -1,7 +1,8 @@
 # PDFConvert
 
 Convert pdf to any other formats using Adobe DC SDK, like txt, xml, doc, docx, jpg, ps, rft etc.
-Notice: To run this project, you must install [Adobe Acrobat DC](https://www.adobe.com/cn/downloads.html?promoid=RL89NGY7&mv=other)
+Notice: To run this project, you need install [Adobe Acrobat Pro DC](https://acrobat.adobe.com/us/en/free-trial-download.html?trackingid=KLBBQ).
+We have not tested other versions of Adobe Acrobat.
 
 ## Environment and Dependency 
 
