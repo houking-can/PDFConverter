@@ -26,7 +26,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
     PDFConvert.exe -i inputfile -o outputdir -r true -t 20000
 ```
 
-4. If you run this repository directly, you may skip step 1 and 2. Just compile and run in Visual Studio.
+4. If you run this repository directly, you can skip step 1 and 2.
 
 ### Batch process with Python (Controller)
 
@@ -41,7 +41,7 @@ Notice: To run this project, you must install [Adobe Acrobat DC](https://www.ado
 - xlrd  
 
 **Notice**  
-If you run this python command in cmd or Powershell of Windows10, you'd be better disable 'QuickEdit Mode' and 'Insert Mode' every time to avoid the processes stuck in suspended state.  Simply right click up the top of your powershell console, head down to properties and under Edit options you will see 'QuickEdit Mode'.
+If you run this python command in cmd console or Powershell of Windows10, you'd be better disable 'QuickEdit Mode' and 'Insert Mode' every time to avoid the process stuck in suspended state.  Simply right click up the top of your powershell console, head down to properties and under Edit options you will see 'QuickEdit Mode'.
 ## Architecture 
 
 ![](architecture.png)
