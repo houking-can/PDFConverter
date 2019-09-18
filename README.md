@@ -89,7 +89,7 @@ Refer to [Acrobat SDK and documents](https://www.adobe.com/devnet/acrobat/docume
 |  Word  |      Slow     |      Yes      |   Good   | General |
 |  Excel |    General    |      Yes      |   Great  |   Hard  |
 |   TXT  |     Fatest    |       No      |  General | Hardest |
-|  HTML  |      Slow     |      Yes      |   Best   |   Easy  |
+|  HTML  |      Fast     |      Yes      |   Best   |   Easy  |
 
 # Statement
 The source code is for learning and communication only.
