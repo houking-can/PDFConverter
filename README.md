@@ -40,6 +40,7 @@ We have not tested other versions of Adobe Acrobat. This link points to the down
 - BeautifulSoup4
 - docx
 - xlrd  
+- lxml
 
 **Notice**  
 If you run this python command in cmd console or Powershell of Windows10, you'd be better disable 'QuickEdit Mode' and 'Insert Mode' every time to avoid the process stuck in suspended state.  Simply right click up the top of your powershell console, head down to properties and under Edit options you will see 'QuickEdit Mode'.
