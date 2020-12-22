@@ -37,7 +37,7 @@ We have not tested other versions of Adobe Acrobat. This link points to the down
 ```
 **Dependency**  
 - python3.5+
-- pip install pywin32==223
+- pip install pypiwin32==223
 - BeautifulSoup4
 - docx
 - xlrd  
