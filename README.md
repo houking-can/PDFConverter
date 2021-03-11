@@ -3,7 +3,7 @@
 1. Convert pdf to any other formats using Adobe DC SDK, like txt, xml, doc, docx, jpg, ps, rft etc.
 Notice: To run this project, you need install [Adobe Acrobat Pro DC](https://acrobat.adobe.com/us/en/free-trial-download.html?trackingid=KLBBQ).
 We have not tested other versions of Adobe Acrobat. This link points to the download page of Acrobat Pro DC, you can try it for free for a few days. 
-2. Using [Xpdf](http://www.xpdfreader.com/download.html), they provide Linux, Windows, Mac command line tools and source code.
+2. Using [grobid](https://github.com/kermitt2/grobid), friendly to scientific paper text(not support images and tables).
 
 ## Environment and Dependency 
 
